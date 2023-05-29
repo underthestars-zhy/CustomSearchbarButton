@@ -19,14 +19,32 @@ struct SwiftUIView: View {
                 }
                 .searchable(text: $text)
                 .navigationTitle("Search")
-                .searchbarButton(image: UIImage(systemName: "star")!, type: .bookmark, visibility: .visible) {
-                    change.toggle()
-                }
+                .searchbarMenuButton(image: UIImage(systemName: "star")!, menu: createMenu(), mode: .always)
             }
 
         } else {
             // Fallback on earlier versions
         }
+    }
+
+    func createMenu() -> UIMenu {
+        let usersItem = UIAction(title: "Users", image: UIImage(systemName: "person.fill")) { (action) in
+
+            print("Users action was tapped")
+        }
+
+        let addUserItem = UIAction(title: "Add User", image: UIImage(systemName: "person.badge.plus")) { (action) in
+
+            print("Add User action was tapped")
+        }
+
+        let removeUserItem = UIAction(title: "Remove User", image: UIImage(systemName: "person.fill.xmark.rtl")) { (action) in
+            print("Remove User action was tapped")
+        }
+
+        let menu = UIMenu(title: "My Menu", options: .displayInline, children: [usersItem , addUserItem , removeUserItem])
+
+        return menu
     }
 }
 
