@@ -14,7 +14,7 @@ struct SearchbarButtonModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .introspectSearchController { sc in
-                let vcDelegate = VCDelegate(visibility: visibility)
+                let vcDelegate = VCDelegate(visibility: visibility, type: type)
                 sc.delegate = vcDelegate
                 self.vcDelegate = vcDelegate
 
@@ -44,29 +44,43 @@ struct SearchbarButtonModifier: ViewModifier {
 
                 switch visibility {
                 case .visible:
-                    sc.searchBar.showsBookmarkButton = true
+                    setVisibility(sc: sc, value: true)
                 case .hidden:
-                    sc.searchBar.showsBookmarkButton = false
+                    setVisibility(sc: sc, value: false)
                 case .auto:
                     if sc.isActive {
-                        sc.searchBar.showsBookmarkButton = true
+                        setVisibility(sc: sc, value: true)
                     } else {
-                        sc.searchBar.showsBookmarkButton = false
+                        setVisibility(sc: sc, value: false)
                     }
                 }
             }
+    }
+
+    func setVisibility(sc: UISearchController, value: Bool) {
+        switch type {
+        case .search:
+            return
+        case .clear:
+            sc.searchBar.showsCancelButton = value
+        case .bookmark:
+            sc.searchBar.showsBookmarkButton = value
+        case .resultsList:
+            sc .searchBar.showsSearchResultsButton = value
+        }
     }
 }
 
 class VCDelegate: NSObject, UISearchControllerDelegate {
     let visibility: Visibility
+    let type: UISearchBar.Icon
 
     func willPresentSearchController(_ searchController: UISearchController) {
         switch visibility {
         case .auto, .visible:
-            searchController.searchBar.showsBookmarkButton = true
+            setVisibility(sc: sc, value: true)
         case .hidden:
-            searchController.searchBar.showsBookmarkButton = false
+            setVisibility(sc: sc, value: false)
         }
     }
 
@@ -75,21 +89,35 @@ class VCDelegate: NSObject, UISearchControllerDelegate {
         case .auto, .visible:
             searchController.searchBar.showsBookmarkButton = true
         case .hidden:
-            searchController.searchBar.showsBookmarkButton = false
+            setVisibility(sc: sc, value: true)
         }
     }
 
     func didDismissSearchController(_ searchController: UISearchController) {
         switch visibility {
         case .auto, .hidden:
-            searchController.searchBar.showsBookmarkButton = false
+            setVisibility(sc: sc, value: false)
         case .visible:
-            searchController.searchBar.showsBookmarkButton = true
+            setVisibility(sc: sc, value: true)
         }
     }
 
-    init(visibility: Visibility) {
+    init(visibility: Visibility, type: UISearchBar.Icon) {
         self.visibility = visibility
+        self.type = type
+    }
+
+    func setVisibility(sc: UISearchController, value: Bool) {
+        switch type {
+        case .search:
+            return
+        case .clear:
+            sc.searchBar.showsCancelButton = value
+        case .bookmark:
+            sc.searchBar.showsBookmarkButton = value
+        case .resultsList:
+            sc .searchBar.showsSearchResultsButton = value
+        }
     }
 }
 

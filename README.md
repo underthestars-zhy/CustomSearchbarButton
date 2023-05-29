@@ -4,7 +4,7 @@ This package enables you to effortlessly incorporate UIKit SearchBar buttons int
 
 ## Installation
 
-Requirement: iOS15+. CustomSearchbarButton can be installed through [Swift Package Manager](https://developer.apple.com/documentation/swift_packages/adding_package_dependencies_to_your_app)
+Requirement: iOS15+. CustomSearchbarButton can be installed through [Swift Package Manager](https://developer.apple.com/documentation/swift_packages/adding_package_dependencies_to_your_app).
 
 ```swift
 .package(url: "https://github.com/underthestars-zhy/CustomSearchbarButton", .upToNextMajor(from: "1.0.0"))
@@ -24,7 +24,7 @@ By using CustomSearchbarButton, you only need to add a simple modification to yo
 
 CustomSearchBarButton supports four different types of buttons:
 
-* Search
+* Search (Cannot set visibility)
 * Clear
 * Bookbmark
 * Result List
